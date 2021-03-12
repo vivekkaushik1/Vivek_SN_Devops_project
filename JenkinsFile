@@ -12,14 +12,14 @@ pipeline {
        maven 'Maven'
    }
   stages {
-       stage('Build') {
+       stage('Connect_to_Nexus') {
            steps {
               snDevOpsStep()
               sh 'mvn -B -DskipTests clean compile'
 
            }
        }
-       stage('UnitTest') {
+       stage('Download_Artifacts') {
            steps {
               snDevOpsStep()
               sh 'mvn test'
@@ -30,7 +30,7 @@ pipeline {
              }
            }
        }
-      stage('Connect_to_Nexus') {
+      stage('GetPullRequest') {
                  steps {
                     snDevOpsStep()
                     echo 'Deploying the change....'
@@ -38,7 +38,7 @@ pipeline {
                  }
       }
 
-     stage('PublishArtifacts') { 
+     stage('MergePullRequest') { 
 	            steps {
 	            	snDevOpsStep (enabled:true)
 	               //snDevOpsStep (stepSysId:'47828d591b9c60106951da86cc4bcbfa', ignoreErrors:true)
@@ -53,7 +53,7 @@ pipeline {
 	            
 	        }
 
-		stage('MergePullRequest') {
+		stage('Build') {
          steps {
          	snDevOpsStep (enabled:true)
             //snDevOpsStep (stepSysId:'5b9281591b9c60106951da86cc4bcbfe', ignoreErrors:true)
@@ -63,7 +63,7 @@ pipeline {
         
          }
  	}
-	stage('Init_Service') {
+	stage('UnitTest') {
          steps {
          	snDevOpsStep (enabled:true)
             //snDevOpsStep (stepSysId:'5b9281591b9c60106951da86cc4bcbfe', ignoreErrors:true)
@@ -73,17 +73,7 @@ pipeline {
         
          }
  	}
-	stage('IT_TEST') {
-         steps {
-         	snDevOpsStep (enabled:true)
-            //snDevOpsStep (stepSysId:'5b9281591b9c60106951da86cc4bcbfe', ignoreErrors:true)
-            echo 'Publishing Package....'
-         	//snDevOpsPackage(name: "${pkgName}-${env.BUILD_NUMBER}", artifactsPayload: """{"artifacts":[{"name": "${artifactname}", "repositoryName": "${repoName}"}], "branchName":"master"}""")
-            snDevOpsPackage(name: "${pkgName}-${env.BUILD_NUMBER}", artifactsPayload: """{"artifacts":[{"name": "${artifactname}", "version": "1.${env.BUILD_NUMBER}", "repositoryName": "${repoName}"}], "branchName":"master"}""")
-        
-         }
- 	}
-	stage('GetPullRequest') {
+	stage('ITTest') {
          steps {
          	snDevOpsStep (enabled:true)
             //snDevOpsStep (stepSysId:'5b9281591b9c60106951da86cc4bcbfe', ignoreErrors:true)
@@ -94,6 +84,16 @@ pipeline {
          }
  	}
 	stage('Deploy') {
+         steps {
+         	snDevOpsStep (enabled:true)
+            //snDevOpsStep (stepSysId:'5b9281591b9c60106951da86cc4bcbfe', ignoreErrors:true)
+            echo 'Publishing Package....'
+         	//snDevOpsPackage(name: "${pkgName}-${env.BUILD_NUMBER}", artifactsPayload: """{"artifacts":[{"name": "${artifactname}", "repositoryName": "${repoName}"}], "branchName":"master"}""")
+            snDevOpsPackage(name: "${pkgName}-${env.BUILD_NUMBER}", artifactsPayload: """{"artifacts":[{"name": "${artifactname}", "version": "1.${env.BUILD_NUMBER}", "repositoryName": "${repoName}"}], "branchName":"master"}""")
+        
+         }
+ 	}
+	stage('Init_Service') {
          steps {
          	snDevOpsStep (enabled:true)
             //snDevOpsStep (stepSysId:'5b9281591b9c60106951da86cc4bcbfe', ignoreErrors:true)
