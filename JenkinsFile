@@ -73,7 +73,7 @@ def printLogs() {
       for (int j = 0; j < 10; j++) {
           s1 += s1;
           println s1
-          //sh "echo Hello  dsfsfd fsd fds fdsf sdf sdf dsf dsf"
+          sh "echo Hello  dsfsfd fsd fds fdsf sdf sdf dsf dsf"
       }
     }
   }
