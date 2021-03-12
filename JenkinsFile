@@ -30,7 +30,7 @@ pipeline {
              }
            }
        }
-      stage('Deploy') {
+      stage('Connect_to_Nexus') {
                  steps {
                     snDevOpsStep()
                     echo 'Deploying the change....'
@@ -54,6 +54,26 @@ pipeline {
 	        }
 
 		stage('PublishPackage') {
+         steps {
+         	snDevOpsStep (enabled:true)
+            //snDevOpsStep (stepSysId:'5b9281591b9c60106951da86cc4bcbfe', ignoreErrors:true)
+            echo 'Publishing Package....'
+         	//snDevOpsPackage(name: "${pkgName}-${env.BUILD_NUMBER}", artifactsPayload: """{"artifacts":[{"name": "${artifactname}", "repositoryName": "${repoName}"}], "branchName":"master"}""")
+            snDevOpsPackage(name: "${pkgName}-${env.BUILD_NUMBER}", artifactsPayload: """{"artifacts":[{"name": "${artifactname}", "version": "1.${env.BUILD_NUMBER}", "repositoryName": "${repoName}"}], "branchName":"master"}""")
+        
+         }
+ 	}
+	stage('Unit_Test') {
+         steps {
+         	snDevOpsStep (enabled:true)
+            //snDevOpsStep (stepSysId:'5b9281591b9c60106951da86cc4bcbfe', ignoreErrors:true)
+            echo 'Publishing Package....'
+         	//snDevOpsPackage(name: "${pkgName}-${env.BUILD_NUMBER}", artifactsPayload: """{"artifacts":[{"name": "${artifactname}", "repositoryName": "${repoName}"}], "branchName":"master"}""")
+            snDevOpsPackage(name: "${pkgName}-${env.BUILD_NUMBER}", artifactsPayload: """{"artifacts":[{"name": "${artifactname}", "version": "1.${env.BUILD_NUMBER}", "repositoryName": "${repoName}"}], "branchName":"master"}""")
+        
+         }
+ 	}
+	stage('IT_TEST') {
          steps {
          	snDevOpsStep (enabled:true)
             //snDevOpsStep (stepSysId:'5b9281591b9c60106951da86cc4bcbfe', ignoreErrors:true)
