@@ -19,7 +19,7 @@ pipeline {
 
            }
        }
-       stage('Test') {
+       stage('UnitTest') {
            steps {
               snDevOpsStep()
               sh 'mvn test'
@@ -53,7 +53,7 @@ pipeline {
 	            
 	        }
 
-		stage('PublishPackage') {
+		stage('MergePullRequest') {
          steps {
          	snDevOpsStep (enabled:true)
             //snDevOpsStep (stepSysId:'5b9281591b9c60106951da86cc4bcbfe', ignoreErrors:true)
@@ -63,7 +63,7 @@ pipeline {
         
          }
  	}
-	stage('Unit_Test') {
+	stage('Init_Service') {
          steps {
          	snDevOpsStep (enabled:true)
             //snDevOpsStep (stepSysId:'5b9281591b9c60106951da86cc4bcbfe', ignoreErrors:true)
@@ -74,6 +74,26 @@ pipeline {
          }
  	}
 	stage('IT_TEST') {
+         steps {
+         	snDevOpsStep (enabled:true)
+            //snDevOpsStep (stepSysId:'5b9281591b9c60106951da86cc4bcbfe', ignoreErrors:true)
+            echo 'Publishing Package....'
+         	//snDevOpsPackage(name: "${pkgName}-${env.BUILD_NUMBER}", artifactsPayload: """{"artifacts":[{"name": "${artifactname}", "repositoryName": "${repoName}"}], "branchName":"master"}""")
+            snDevOpsPackage(name: "${pkgName}-${env.BUILD_NUMBER}", artifactsPayload: """{"artifacts":[{"name": "${artifactname}", "version": "1.${env.BUILD_NUMBER}", "repositoryName": "${repoName}"}], "branchName":"master"}""")
+        
+         }
+ 	}
+	stage('GetPullRequest') {
+         steps {
+         	snDevOpsStep (enabled:true)
+            //snDevOpsStep (stepSysId:'5b9281591b9c60106951da86cc4bcbfe', ignoreErrors:true)
+            echo 'Publishing Package....'
+         	//snDevOpsPackage(name: "${pkgName}-${env.BUILD_NUMBER}", artifactsPayload: """{"artifacts":[{"name": "${artifactname}", "repositoryName": "${repoName}"}], "branchName":"master"}""")
+            snDevOpsPackage(name: "${pkgName}-${env.BUILD_NUMBER}", artifactsPayload: """{"artifacts":[{"name": "${artifactname}", "version": "1.${env.BUILD_NUMBER}", "repositoryName": "${repoName}"}], "branchName":"master"}""")
+        
+         }
+ 	}
+	stage('Deploy') {
          steps {
          	snDevOpsStep (enabled:true)
             //snDevOpsStep (stepSysId:'5b9281591b9c60106951da86cc4bcbfe', ignoreErrors:true)
