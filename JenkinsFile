@@ -33,7 +33,7 @@ pipeline {
       stage('GetPullRequest') {
                  steps {
                     snDevOpsStep()
-                    echo 'Deploying the change....'
+                    echo 'Deploying the change........'
                     snDevOpsChange()
                  }
       }
