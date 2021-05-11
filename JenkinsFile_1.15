@@ -21,10 +21,24 @@ pipeline {
            }
        }
        stage('Test') {
+       
+	       environment {
+	    		 SCANNER_HOME = tool 'sonarScanner'
+	  		}
            steps {
               snDevOpsStep()
                sh 'mvn test'
-	       snDevOpsChange()
+               
+				withSonarQubeEnv('Sonar_Cloud') {
+					sh '${SCANNER_HOME}/bin/sonar-scanner -Dproject.settings=${SCANNER_HOME}/conf/qa-sonar-scanner-cloud.properties'
+			       
+	        	}
+ 
+        		//withSonarQubeEnv('sonarQube_local') {
+			       //sh '${SCANNER_HOME}/bin/sonar-scanner -Dproject.settings=${SCANNER_HOME}/conf/qa-sonar-scanner.properties'
+			       //}
+
+	       
            }
            post {
                     always {
@@ -36,7 +50,7 @@ pipeline {
                  steps {
                     snDevOpsStep()
                     echo 'Deploying the change....'
-		    snDevOpsChange()
+		    		snDevOpsChange(ignoreErrors: true)
                     
                  }
       }
@@ -44,7 +58,7 @@ pipeline {
      stage('PublishArtifacts') { 
 	            steps {
 	               snDevOpsStep()
-	               snDevOpsChange()
+	               snDevOpsChange(ignoreErrors: true)
 	               echo 'Publishing Artifacts....'
                 	sleep(time:65,unit:"SECONDS")
 	               // snDevOpsArtifact(artifactsPayload:"""{"artifacts": [{"name": "sa-web-ui.jar","version":"${artifactVersion}","semanticVersion": "${artifactSemVersion}","repositoryName": "First_repo"}]}""")
@@ -62,7 +76,7 @@ pipeline {
 		stage('PublishPackage') {
          steps {
             snDevOpsStep()
-	    snDevOpsChange()
+	    	snDevOpsChange(ignoreErrors: true)
             echo 'Publishing Package....'
             // format-1
             //snDevOpsPackage(name: "newPackage", artifactsPayload: """{"artifacts": [{"name": "first_repo.jar","repositoryName": "first_repo","version": "${version}"},{"name": "sa-frontend.jar","repositoryName": "services-1031","version": "9.2"}],"branchName":"master"}""")
@@ -76,10 +90,12 @@ pipeline {
          	// format-4
          	snDevOpsPackage(name: "${pkgName}-${env.BUILD_NUMBER}", artifactsPayload: """{"artifacts":[{"name": "${artifactname}", "version": "1.${env.BUILD_NUMBER}", "repositoryName": "${repoName}"}], "branchName":"master"}""")
          	sh 'sleep 10'
-         	snDevOpsPackage(name: "${pkgName}-${env.BUILD_NUMBER}", artifactsPayload: """{"artifacts":[{"name": "${artifactname}", "version": "1.${env.BUILD_NUMBER}", "repositoryName": "${repoName}"}], "branchName":"master"}""")
+         	//snDevOpsPackage(name: "${pkgName}-${env.BUILD_NUMBER}", artifactsPayload: """{"artifacts":[{"name": "${artifactname}", "version": "1.${env.BUILD_NUMBER}", "repositoryName": "${repoName}"}], "branchName":"master"}""")
  
             }
- 	}
- }
+ 		}
+ 
+	 }
+ 
  
 }
