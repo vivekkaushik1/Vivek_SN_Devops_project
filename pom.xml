@@ -78,4 +78,9 @@
 
 		</plugins>
 	</build>
+	<properties>
+ 	 <sonar.projectKey>vivekkaushik1_Vivek_SN_Devops_project</sonar.projectKey>
+  	 <sonar.organization>vivekkaushik1</sonar.organization>
+  	 <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+	</properties>
 </project>
