@@ -35,6 +35,7 @@ pipeline {
                     snDevOpsStep()
                     echo 'Deploying the change........'
                     snDevOpsChange()
+		    
                  }
       }
 
@@ -60,7 +61,10 @@ pipeline {
             echo 'Publishing Package....'
          	//snDevOpsPackage(name: "${pkgName}-${env.BUILD_NUMBER}", artifactsPayload: """{"artifacts":[{"name": "${artifactname}", "repositoryName": "${repoName}"}], "branchName":"master"}""")
             snDevOpsPackage(name: "${pkgName}-${env.BUILD_NUMBER}", artifactsPayload: """{"artifacts":[{"name": "${artifactname}", "version": "1.${env.BUILD_NUMBER}", "repositoryName": "${repoName}"}], "branchName":"master"}""")
-        
+        withSonarQubeEnv('Sonar_Cloud') {
+					sh '${SCANNER_HOME}/bin/sonar-scanner -Dproject.settings=${SCANNER_HOME}/conf/qa-sonar-scanner-cloud.properties'
+			       
+	        	}
          }
  	}
 	stage('UnitTest') {
