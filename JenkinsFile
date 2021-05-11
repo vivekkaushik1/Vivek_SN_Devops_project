@@ -20,8 +20,12 @@ pipeline {
            }
        }
        stage('Download_Artifacts') {
+        environment {
+	    		 SCANNER_HOME = tool 'sonarScanner'
+	  		}
            steps {
               snDevOpsStep()
+	      
 	       echo 'Downloading Artifacts ........'
               sh 'mvn test'
 	      withSonarQubeEnv('Sonar_Cloud') {
