@@ -11,7 +11,7 @@ pipeline {
   tools {
        maven 'Maven'
    }
-
+ stages {
        stage('Download_Artifacts') {
         environment {
 	    		 SCANNER_HOME = tool 'sonarScanner'
@@ -32,7 +32,7 @@ pipeline {
              }
            }
        }
- 
+ }
 }
 def printLogs() {
     sh "echo Going to echo a list"
