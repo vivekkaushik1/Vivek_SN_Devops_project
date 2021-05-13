@@ -6,13 +6,7 @@ def packageName = "spboot-package_${env.BUILD_NUMBER}"
 def version = "${env.BUILD_NUMBER}.0"
 def pkgName = "sp-boot-package"
 
-pipeline {
-  agent any
-  tools {
-       maven 'Maven'
-   }
-  
-       stage('Download_Artifacts') {
+ stage('Download_Artifacts') {
         environment {
 	    		 SCANNER_HOME = tool 'sonarScanner'
 	  		}
@@ -32,9 +26,6 @@ pipeline {
              }
            }
        }
-      
-	
- }
 def printLogs() {
     sh "echo Going to echo a list"
     for (int i = 0; i < 2; i++) {
