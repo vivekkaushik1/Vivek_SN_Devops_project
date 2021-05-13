@@ -34,7 +34,6 @@ pipeline {
        }
  }
 }
-}
 def printLogs() {
     sh "echo Going to echo a list"
     for (int i = 0; i < 2; i++) {
