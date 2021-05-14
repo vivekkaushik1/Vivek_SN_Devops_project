@@ -33,6 +33,7 @@ pipeline {
            }
        }
  }
+ }
 }
 def printLogs() {
     sh "echo Going to echo a list"
