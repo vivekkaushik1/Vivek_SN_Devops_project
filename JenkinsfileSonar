@@ -8,7 +8,7 @@ pipeline {
         maven 'Maven' 
     }
     stages {
-        stage('BuildAndTest') {
+    /*    stage('BuildAndTest') {
             steps {
 			 echo 'Running BuildAndTest'
              sh 'mvn compile'
@@ -19,7 +19,7 @@ pipeline {
                     junit '**/target/surefire-reports/*.xml' 
                 }
            }
-        }
+        }*/
         stage('sonarScanner') {
             environment {
                 scannerHome = tool 'sonarScanner'
